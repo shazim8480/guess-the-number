@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 
 const Card = (props) => {
   return (
     <View style={{ ...styles.card, ...props.style }}>{props.children}</View>
-    // tip: additional styles will be overwritten with the copied card styles //
+    // tip: additional styles will be overwritten with the copied card styles into the style object //
   );
 };
 

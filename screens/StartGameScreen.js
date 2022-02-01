@@ -1,5 +1,13 @@
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
-import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Keyboard,
+  Button,
+  TouchableWithoutFeedback,
+  Alert,
+} from "react-native";
+import React, { useState } from "react";
 import Card from "../components/Card";
 import Input from "../components/Input";
 
@@ -7,27 +15,99 @@ import Input from "../components/Input";
 import Colors from "../constants/colors";
 
 const StartGameScreen = (props) => {
+  // for validating the input and keyboard //
+  const [enteredValue, setEnteredValue] = useState("");
+
+  const [confirmed, setConfirmed] = useState(false);
+
+  // to have the selected number saved and be reused accordingly later//
+  const [selectedNumber, setSelectedNumber] = useState(""); // for number only//
+
+  // check the input from keyboard and set the value
+  const numberInputHandler = (inputText) => {
+    // replace the empty string with only numbers // only NUMBERS ARE ALLOWED TO INPUT
+    setEnteredValue(inputText.replace(/[^0-9]/g, ""));
+  };
+
+  //reset handler //
+  const resetInputHandler = () => {
+    setEnteredValue("");
+  };
+
+  // confirmation stage //
+  const confirmInputHandler = () => {
+    const chosenNumber = parseInt(enteredValue);
+    // check the condition if the entered number is invalid.
+    if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+      Alert.alert("Invalid Input!", "Please choose a number between 1 and 99", [
+        {
+          text: "Cancel",
+          onPress: resetInputHandler,
+          style: "destructive",
+        },
+      ]);
+      return; //if so, then discontinue the function//
+    }
+    setConfirmed(true);
+    setSelectedNumber(chosenNumber); // set the number after being validated
+    setEnteredValue(""); // reset the entered value upon pressing confirm BUTTON //
+  };
+
+  // now we will show the selected number to the user visually //////////////////////////////////////////////////////////////////
+
+  let confirmedOutput; // initial declaration , later used inside main function//
+
+  if (confirmed) {
+    // from "confirmed" useState
+    confirmedOutput = <Text>Chosen Number : {selectedNumber}</Text>;
+  }
+
   return (
-    <View style={styles.screen}>
-      <Text style={styles.gameTitle}>Start New Game!</Text>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss(); // to dismiss the keyboard on outside touch //
+      }}
+    >
+      <View style={styles.screen}>
+        <Text style={styles.gameTitle}>Start New Game!</Text>
 
-      {/* card with input container */}
-      <Card style={styles.inputContainer}>
-        <Text style={styles.title}>Select a Number</Text>
+        {/* card with input container */}
+        <Card style={styles.inputContainer}>
+          <Text style={styles.title}>Select a Number</Text>
 
-        {/* input number here */}
-        <Input style={styles.input} />
+          {/* input number here */}
+          <Input
+            style={styles.input}
+            blurOnSubmit
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="number-pad"
+            maxLength={2}
+            onChangeText={numberInputHandler}
+            value={enteredValue}
+          />
 
-        <View style={styles.buttonContainer}>
-          <View style={styles.button}>
-            <Button title="Reset" onPress={() => {}} color={Colors.secondary} />
+          <View style={styles.buttonContainer}>
+            <View style={styles.button}>
+              <Button
+                title="Reset"
+                onPress={resetInputHandler}
+                color={Colors.secondary}
+              />
+            </View>
+            <View style={styles.button}>
+              <Button
+                title="Confirm"
+                onPress={confirmInputHandler}
+                color={Colors.primary}
+              />
+            </View>
           </View>
-          <View style={styles.button}>
-            <Button title="Confirm" onPress={() => {}} color={Colors.primary} />
-          </View>
-        </View>
-      </Card>
-    </View>
+        </Card>
+        {/* show the selected number */}
+        {confirmedOutput}
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
