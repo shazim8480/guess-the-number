@@ -13,6 +13,7 @@ import Input from "../components/Input";
 
 // make development easier, import colors //
 import Colors from "../constants/colors";
+import NumberContainer from "../components/NumberContainer";
 
 const StartGameScreen = (props) => {
   // for validating the input and keyboard //
@@ -51,15 +52,23 @@ const StartGameScreen = (props) => {
     setConfirmed(true);
     setSelectedNumber(chosenNumber); // set the number after being validated
     setEnteredValue(""); // reset the entered value upon pressing confirm BUTTON //
+    Keyboard.dismiss();
   };
 
   // now we will show the selected number to the user visually //////////////////////////////////////////////////////////////////
 
   let confirmedOutput; // initial declaration , later used inside main function//
 
+  // from "confirmed" useState/////////////////
   if (confirmed) {
-    // from "confirmed" useState
-    confirmedOutput = <Text>Chosen Number : {selectedNumber}</Text>;
+    confirmedOutput = (
+      <Card style={styles.summaryContainer}>
+        <Text>You Selected</Text>
+        <NumberContainer>{selectedNumber}</NumberContainer>
+        <Button title="START GAME" color={Colors.secondary} />
+      </Card>
+      // {selectedNumber} is passed in the NumberContainer component and all the styles are applied here through {props.children}
+    );
   }
 
   return (
@@ -145,5 +154,9 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 88,
+  },
+  summaryContainer: {
+    marginTop: 20,
+    alignItems: "center",
   },
 });

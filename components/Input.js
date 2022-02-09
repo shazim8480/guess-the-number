@@ -2,7 +2,7 @@ import { StyleSheet, TextInput } from "react-native";
 import React from "react";
 
 const Input = (props) => {
-  // {...props} allows you to take all the props from outside custom input component//
+  // {...props} allows you to take all the props(API) for TextInput Component from outside custom input component//
   return <TextInput {...props} style={{ ...styles.input, ...props.style }} />;
 };
 
