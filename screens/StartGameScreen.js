@@ -14,6 +14,8 @@ import Input from "../components/Input";
 // make development easier, import colors //
 import Colors from "../constants/colors";
 import NumberContainer from "../components/NumberContainer";
+import TitleText from "../components/TitleText";
+import BodyText from "../components/BodyText";
 
 const StartGameScreen = (props) => {
   // for validating the input and keyboard //
@@ -65,7 +67,12 @@ const StartGameScreen = (props) => {
       <Card style={styles.summaryContainer}>
         <Text>You Selected</Text>
         <NumberContainer>{selectedNumber}</NumberContainer>
-        <Button title="START GAME" color={Colors.secondary} />
+        {/* onStartGame props received from app.js line 18 */}
+        <Button
+          title="START GAME"
+          color={Colors.secondary}
+          onPress={() => props.onStartGame(selectedNumber)}
+        />
       </Card>
       // {selectedNumber} is passed in the NumberContainer component and all the styles are applied here through {props.children}
     );
@@ -78,11 +85,11 @@ const StartGameScreen = (props) => {
       }}
     >
       <View style={styles.screen}>
-        <Text style={styles.gameTitle}>Start New Game!</Text>
+        <TitleText style={styles.gameTitle}>Start New Game!</TitleText>
 
         {/* card with input container */}
         <Card style={styles.inputContainer}>
-          <Text style={styles.title}>Select a Number</Text>
+          <BodyText style={styles.title}>Select a Number</BodyText>
 
           {/* input number here */}
           <Input
@@ -129,12 +136,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   gameTitle: {
-    fontSize: 24,
+    fontSize: 20,
     marginVertical: 10,
     marginBottom: 24,
   },
   title: {
-    fontSize: 20,
     marginVertical: 10,
   },
   inputContainer: {
